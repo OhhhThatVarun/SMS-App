@@ -1,12 +1,22 @@
 package com.varun.smsanimall.data
 
 import android.content.ContentResolver
+import android.provider.Telephony
 import com.varun.smsanimall.domain.SmsRepository
 import com.varun.smsanimall.domain.model.Sms
 
 class SmsRepositoryImpl(private val contentResolver: ContentResolver) : SmsRepository {
 
     override fun getSmses(): List<Sms> {
-        return listOf(Sms("Varun", "Varnu 1", "This is a test message", ""))
+        val smses = mutableListOf<Sms>()
+        val cursor = contentResolver.query(Telephony.Sms.CONTENT_URI, null, null, null, null)
+        while (cursor != null && cursor.moveToNext()) {
+            val timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(Telephony.Sms.DATE))
+            val number = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.ADDRESS))
+            val body = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY))
+            smses.add(Sms(number, "", body, timestamp))
+        }
+        cursor?.close()
+        return smses
     }
 }

@@ -11,7 +11,7 @@ class SmsListViewModel(private val smsRepository: SmsRepository) : ViewModel() {
     val smses: LiveData<List<Sms>> get() = _smses
     private val _smses = MutableLiveData<List<Sms>>()
 
-    init {
+    fun loadSms() {
         _smses.postValue(smsRepository.getSmses())
     }
 }
