@@ -1,7 +1,7 @@
-package com.varun.smsanimall
+package com.varun.smsanimall.platform
 
 import android.app.Application
-import com.varun.smsanimall.data.dataKoinModule
+import com.varun.smsanimall.data.di.dataKoinModule
 import com.varun.smsanimall.ui.di.uiKoinModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
