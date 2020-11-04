@@ -3,6 +3,7 @@ package com.varun.smsanimall.ui.feature.list
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,11 +33,15 @@ class SmsListFragment : Fragment() {
         requestSmsPermission()
         viewModel.smses.observe(viewLifecycleOwner, {
             binding.adapter?.setSms(it)
+            if (arguments != null && arguments?.getLong(TIMESTAMP_MILLIS_KEY) != null) {
+                // animateRecyclerViewItem(arguments?.getLong(TIMESTAMP_MILLIS_KEY)!!)
+                Log.e("Got some data",arguments?.getLong(TIMESTAMP_MILLIS_KEY)!!.toString())
+            }
         })
     }
 
     private fun requestSmsPermission() {
-        requestPermissions(arrayOf(Manifest.permission.READ_SMS), SMS_PERMISSION_CODE)
+        requestPermissions(arrayOf(Manifest.permission.READ_SMS,Manifest.permission.RECEIVE_SMS), SMS_PERMISSION_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -51,6 +56,7 @@ class SmsListFragment : Fragment() {
     }
 
     companion object {
+        const val TIMESTAMP_MILLIS_KEY = "TIMESTAMP_MILLIS_KEY"
         private const val SMS_PERMISSION_CODE = 0
     }
 }
