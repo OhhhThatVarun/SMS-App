@@ -1,9 +1,9 @@
-package com.varun.smsanimall.data
+package com.varun.smsanimall.data.repository
 
 import android.content.ContentResolver
 import android.provider.Telephony
 import com.varun.smsanimall.data.entity.SmsEntity
-import com.varun.smsanimall.domain.SmsRepository
+import com.varun.smsanimall.domain.repository.SmsRepository
 import com.varun.smsanimall.domain.model.Sms
 
 class SmsRepositoryImpl(private val contentResolver: ContentResolver) : SmsRepository {

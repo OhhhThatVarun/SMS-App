@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.varun.smsanimall.R
@@ -33,15 +35,30 @@ class SmsListFragment : Fragment() {
         requestSmsPermission()
         viewModel.smses.observe(viewLifecycleOwner, {
             binding.adapter?.setSms(it)
-            if (arguments != null && arguments?.getLong(TIMESTAMP_MILLIS_KEY) != null) {
-                // animateRecyclerViewItem(arguments?.getLong(TIMESTAMP_MILLIS_KEY)!!)
-                Log.e("Got some data",arguments?.getLong(TIMESTAMP_MILLIS_KEY)!!.toString())
+            if (arguments != null && arguments?.getLong(MESSAGE_BODY_KEY) != null) {
+                Log.e("Got some data", arguments?.getLong(MESSAGE_BODY_KEY)!!.toString())
+                val position = binding.adapter?.findNewMessagePosition(arguments?.getString(MESSAGE_BODY_KEY)!!)
+                if (position != null) {
+                    binding.recyclerview.post {
+                        val viewHolder = binding.recyclerview.findViewHolderForLayoutPosition(position) as? SmsListRecyclerViewAdapter.SmsListViewHolder
+                        animateRecyclerViewItem(viewHolder?.smsItemSmsBinding?.root)
+                    }
+                }
             }
         })
     }
 
+    private fun animateRecyclerViewItem(view: View?) {
+        view?.startAnimation(AlphaAnimation(0.0f, 1.0f).apply {
+            duration = 250
+            startOffset = 20
+            repeatMode = Animation.REVERSE
+            repeatCount = 5
+        })
+    }
+
     private fun requestSmsPermission() {
-        requestPermissions(arrayOf(Manifest.permission.READ_SMS,Manifest.permission.RECEIVE_SMS), SMS_PERMISSION_CODE)
+        requestPermissions(arrayOf(Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS), SMS_PERMISSION_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -49,14 +66,14 @@ class SmsListFragment : Fragment() {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == SMS_PERMISSION_CODE) {
             viewModel.loadSms()
         } else {
-            Snackbar.make(binding.root, "Need SMS permission to show mesages", Snackbar.LENGTH_LONG).setAction("Ask Again") {
+            Snackbar.make(binding.root, R.string.need_sms_permission, Snackbar.LENGTH_LONG).setAction(R.string.ask_again) {
                 requestSmsPermission()
             }.show()
         }
     }
 
     companion object {
-        const val TIMESTAMP_MILLIS_KEY = "TIMESTAMP_MILLIS_KEY"
+        const val MESSAGE_BODY_KEY = "MESSAGE_BODY_KEY"
         private const val SMS_PERMISSION_CODE = 0
     }
 }

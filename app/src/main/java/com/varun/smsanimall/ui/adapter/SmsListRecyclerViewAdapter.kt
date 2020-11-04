@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.varun.smsanimall.R
 import com.varun.smsanimall.databinding.ItemSmsBinding
-import com.varun.smsanimall.databinding.ItemSmsDateBinding
+import com.varun.smsanimall.databinding.ItemSmsTimeDividerBinding
 import com.varun.smsanimall.domain.model.Sms
 
 class SmsListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -44,10 +44,19 @@ class SmsListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (smses[position].timeElapsed == null) {
             return R.layout.item_sms
         }
-        return R.layout.item_sms_date
+        return R.layout.item_sms_time_divider
     }
 
-    inner class SmsListViewHolder(private val smsItemSmsBinding: ItemSmsBinding) : RecyclerView.ViewHolder(smsItemSmsBinding.root) {
+    fun findNewMessagePosition(body: String): Int {
+        for ((i, sms) in smses.withIndex()) {
+            if (sms.body == body) {
+                return i
+            }
+        }
+        return -1
+    }
+
+    inner class SmsListViewHolder(val smsItemSmsBinding: ItemSmsBinding) : RecyclerView.ViewHolder(smsItemSmsBinding.root) {
 
         fun bind(sms: Sms) {
             smsItemSmsBinding.apply {
@@ -57,10 +66,10 @@ class SmsListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    inner class SmsListDateViewHolder(private val smsItemSmsDateBinding: ItemSmsDateBinding) : RecyclerView.ViewHolder(smsItemSmsDateBinding.root) {
+    inner class SmsListDateViewHolder(private val smsItemSmsTimeDividerBinding: ItemSmsTimeDividerBinding) : RecyclerView.ViewHolder(smsItemSmsTimeDividerBinding.root) {
 
         fun bind(sms: Sms) {
-            smsItemSmsDateBinding.apply {
+            smsItemSmsTimeDividerBinding.apply {
                 this.sms = sms
                 executePendingBindings()
             }

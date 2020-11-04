@@ -1,4 +1,4 @@
-package com.varun.smsanimall.domain
+package com.varun.smsanimall.domain.repository
 
 import com.varun.smsanimall.domain.model.Sms
 

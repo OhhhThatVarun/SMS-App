@@ -4,4 +4,6 @@
     <string name="defaultChannel">SMS default channel</string>
     <string name="notificationDescription">Notifications from SMS App</string>
 
+    <string name="need_sms_permission">Need SMS permission to show messages</string>
+    <string name="ask_again">Ask Again</string>
 </resources>

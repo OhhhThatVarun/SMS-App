@@ -10,7 +10,7 @@ import android.util.Log
 import androidx.navigation.NavDeepLinkBuilder
 import com.varun.smsanimall.R
 import com.varun.smsanimall.ui.MainActivity
-import com.varun.smsanimall.ui.feature.list.SmsListFragment.Companion.TIMESTAMP_MILLIS_KEY
+import com.varun.smsanimall.ui.feature.list.SmsListFragment.Companion.MESSAGE_BODY_KEY
 
 
 class SMSBroadcastReceiver : BroadcastReceiver() {
@@ -27,8 +27,9 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
                             .setGraph(R.navigation.nav_graph)
                             .setDestination(R.id.smsListFragment)
                             .setArguments(Bundle().apply {
-                                putLong(TIMESTAMP_MILLIS_KEY, message.timestampMillis)
+                                putString(MESSAGE_BODY_KEY, message.messageBody)
                             }).createPendingIntent()
+
                     Notifier.postNotification(1, "New Message From ${getSenderName(message)}", message.messageBody, context, pendingIntent)
                 }
             }

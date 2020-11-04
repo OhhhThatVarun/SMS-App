@@ -3,9 +3,9 @@ package com.varun.smsanimall.ui.feature.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.varun.smsanimall.domain.SmsRepository
 import com.varun.smsanimall.domain.TimeElapsed
 import com.varun.smsanimall.domain.model.Sms
+import com.varun.smsanimall.domain.repository.SmsRepository
 
 class SmsListViewModel(private val smsRepository: SmsRepository) : ViewModel() {
 
@@ -13,7 +13,6 @@ class SmsListViewModel(private val smsRepository: SmsRepository) : ViewModel() {
     private val _smses = MutableLiveData<List<Sms>>()
 
     fun loadSms() {
-        //_smses.postValue(smsRepository.getSmses())
         _smses.postValue(formatSmsForList(smsRepository.getSmses()))
     }
 
